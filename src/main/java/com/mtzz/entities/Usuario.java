@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -16,7 +17,7 @@ public class Usuario {
 
     @Column(nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone = "GMT")
-    private Instant dataCadastro; //not null
+    private Date dataCadastro; //not null
 
     @Column(nullable = false, length = 30)
     private String nome; //not null, varchar(30)
@@ -42,7 +43,7 @@ public class Usuario {
 
     public Usuario() {}
 
-    public Usuario(Long id, Instant dataCadastro,
+    public Usuario(Long id, Date dataCadastro,
                    String nome, String login, String senha,
                    String telefone, String email, String perfil,
                    String status) {
@@ -66,11 +67,11 @@ public class Usuario {
         this.id = id;
     }
 
-    public Instant getDataCadastro() {
+    public Date getDataCadastro() {
         return dataCadastro;
     }
 
-    public void setDataCadastro(Instant dataCadastro) {
+    public void setDataCadastro(Date dataCadastro) {
         this.dataCadastro = dataCadastro;
     }
 
