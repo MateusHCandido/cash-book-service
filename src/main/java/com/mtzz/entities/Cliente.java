@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -17,7 +18,7 @@ public class Cliente {
 
     @Column(nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone = "GMT")
-    private Instant dataCadastro; //not null
+    private Date dataCadastro; //not null
 
     @Column(nullable = false, length = 30)
     private String nome; //not null, varchar(30)
@@ -43,6 +44,21 @@ public class Cliente {
     @Column(length = 100)
     private String email; //varchar(100)
 
+    public Cliente() {
+    }
+
+    public Cliente(Long id, Date dataCadastro, String nome, String cpfCnpj, String logradouro, String cidade, String uf, String cep, String telefone, String email) {
+        this.id = id;
+        this.dataCadastro = dataCadastro;
+        this.nome = nome;
+        this.cpfCnpj = cpfCnpj;
+        this.logradouro = logradouro;
+        this.cidade = cidade;
+        this.uf = uf;
+        this.cep = cep;
+        this.telefone = telefone;
+        this.email = email;
+    }
 
     public Long getId() {
         return id;
@@ -52,11 +68,11 @@ public class Cliente {
         this.id = id;
     }
 
-    public Instant getDataCadastro() {
+    public Date getDataCadastro() {
         return dataCadastro;
     }
 
-    public void setDataCadastro(Instant dataCadastro) {
+    public void setDataCadastro(Date dataCadastro) {
         this.dataCadastro = dataCadastro;
     }
 
