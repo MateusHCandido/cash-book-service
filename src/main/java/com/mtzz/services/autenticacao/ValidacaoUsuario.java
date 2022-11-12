@@ -1,5 +1,7 @@
 package com.mtzz.services.autenticacao;
 
+import com.mtzz.entities.Usuario;
+
 public interface ValidacaoUsuario {
 
 
