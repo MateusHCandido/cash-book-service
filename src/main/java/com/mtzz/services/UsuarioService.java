@@ -10,6 +10,7 @@ import com.mtzz.services.autenticacao.exception.InativeUserException;
 import com.mtzz.services.autenticacao.exception.IncorrectLoginOrPasswordException;
 import com.mtzz.services.exceptions.DatabaseException;
 import com.mtzz.services.exceptions.ExistingUserLoginExcepetion;
+import com.mtzz.services.util.FormatData;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class UsuarioService implements ValidacaoUsuario {
+public class UsuarioService extends FormatData implements ValidacaoUsuario {
 
     @Autowired
     private UserRepository repository;
@@ -113,23 +114,9 @@ public class UsuarioService implements ValidacaoUsuario {
         return oldData;
     }
 
-    protected Date dateFormat() throws ParseException{
-        Date dataCadastro = new Date();
-        String formatDate;
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        formatDate = dateFormat.format(dataCadastro);
-        dataCadastro = dateFormat.parse(formatDate);
-        return dataCadastro;
-        }
 
 
 
-    protected String nameFormat(String name){
-        name = name.trim();
-        name = name.toUpperCase();
-        return name;
-    }
 
 
 }

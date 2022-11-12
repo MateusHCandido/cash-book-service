@@ -3,14 +3,16 @@ package com.mtzz.services;
 import com.mtzz.entities.Cliente;
 import com.mtzz.repositories.ClienteRepository;
 import com.mtzz.services.exceptions.ValueNotFoundException;
+import com.mtzz.services.util.FormatData;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.text.ParseException;
 import java.util.Optional;
 
 
 @Service
-public class ClienteService {
+public class ClienteService extends FormatData {
 
     @Autowired
     private ClienteRepository repository;
@@ -25,19 +27,25 @@ public class ClienteService {
     }
 
     public Cliente createCliente(Cliente cliente){
-        cliente.setDataCadastro(user.dateFormat());
-        cliente.setNome(user.nameFormat(cliente.getNome()));
-        cliente.setCpfCnpj(numberFormat(cliente.getCpfCnpj()));
-        cliente.setLogradouro(user.nameFormat(cliente.getLogradouro()));
-        cliente.setCidade(user.nameFormat(cliente.getCidade()));
-        cliente.setUf(user.nameFormat(cliente.getUf()));
-        cliente.setTelefone(numberFormat(cliente.getTelefone()));
+        try {
+            cliente.setDataCadastro(dateFormat());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        cliente.setNome(cliente.getNome());
+        cliente.setCpfCnpj(cliente.getCpfCnpj());
+        cliente.setLogradouro(cliente.getLogradouro());
+        cliente.setCidade(cliente.getCidade());
+        cliente.setUf(cliente.getUf());
+        cliente.setTelefone(cliente.getTelefone());
         return repository.save(cliente);
     }
 
-    public Cliente updateCliente(Long id, Cliente cliente){
-        Cliente newCliente = repository.getReferenceById(id);
-        newCliente = updateData(newCliente, cliente);
+
+
+    public Cliente updateCliente(Cliente cliente){
+        Cliente newCliente = repository.getReferenceById(cliente.getId());
+        updateData(newCliente, cliente);
         return repository.save(cliente);
     }
     
@@ -50,7 +58,7 @@ public class ClienteService {
 
     }
 
-    public Cliente updateData(Cliente dataClient, Cliente newDataClient){
+    public void updateData(Cliente dataClient, Cliente newDataClient){
         try {
             dataClient.setLogradouro(newDataClient.getLogradouro());
             dataClient.setCidade(newDataClient.getCidade());
@@ -63,13 +71,10 @@ public class ClienteService {
         }catch (NullPointerException err){
             throw new ValueNotFoundException("Change values referring to street, city, uf, zip code, telephone and " +
                     "email must be parameterized");
-        } finally {
-          return dataClient;
         }
-
-    }
-
-    protected String numberFormat(String number) {
-        return number = number.replaceAll("[^0-9]+", "");
     }
 }
+
+
+
+
