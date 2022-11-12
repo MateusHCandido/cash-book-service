@@ -1,5 +1,9 @@
 package com.mtzz.services;
 
+import com.mtzz.entities.Usuario;
+import com.mtzz.repositories.DTO.userDTO.EmailDTO;
+import com.mtzz.repositories.DTO.userDTO.NameDTO;
+import com.mtzz.repositories.DTO.userDTO.UserDTO;
 import com.mtzz.repositories.UserRepository;
 import com.mtzz.services.autenticacao.ValidacaoUsuario;
 import com.mtzz.services.autenticacao.exception.InativeUserException;
@@ -15,8 +19,8 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UsuarioService implements ValidacaoUsuario {
@@ -24,6 +28,35 @@ public class UsuarioService implements ValidacaoUsuario {
     @Autowired
     private UserRepository repository;
 
+    @Override
+    public Usuario autenticarLogin(String login, String senha) {
+        Usuario user = repository.findByLoginAndSenha(login, senha);
+        if(user == null){
+            throw new IncorrectLoginOrPasswordException("Login or password invalid");
+        }
+        if (user.getLogin().equals(login) && (user.getSenha().equals(senha))) {
+            if (user.getStatus().equals("A")) {
+                user = repository.getReferenceById(user.getId());
+            } else if(user.getStatus().equals("C")){
+                throw new InativeUserException("User is not active");
+            }
+        }
+        return user;
+    }
+
+    public Usuario create(Usuario usuario){
+        try {
+            usuario.setNome(nameFormat(usuario.getNome()));
+            try {
+                usuario.setDataCadastro(dateFormat());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        } catch (ConstraintViolationException error){
+            throw new ExistingUserLoginExcepetion(error.getMessage());
+        }
+        return repository.save(usuario);
+    }
 
     public Usuario findById(Long id){
         Optional<Usuario> user = repository.findById(id);
@@ -31,20 +64,11 @@ public class UsuarioService implements ValidacaoUsuario {
                 ("User not found! Id: " + id, "Cause type: " + Usuario.class.getName()));
     }
 
-    public Usuario create(Usuario usuario){
-        try {
-            usuario.setNome(nameFormat(usuario.getNome()));
-            usuario.setDataCadastro(dateFormat());
-        } catch (ConstraintViolationException error){
-            throw new ExistingUserLoginExcepetion(error.getMessage());
-        }
-        return repository.save(usuario);
-    }
 
-    public Usuario update(Long id, Usuario usuario){
-        Usuario newUser = repository.getReferenceById(id);
+    public void update(Usuario usuario){
+        Usuario newUser = repository.getReferenceById(usuario.getId());
         newUser = updateDate(newUser, usuario);
-        return repository.save(newUser);
+        repository.save(newUser);
     }
 
     public void delete(Long id){
@@ -57,51 +81,49 @@ public class UsuarioService implements ValidacaoUsuario {
         }
     }
 
-    @Override
-    public Usuario autenticarLogin(String login, String senha) {
-        Usuario user = repository.findByLoginAndSenha(login, senha);
-        if(user == null){
-            throw new IncorrectLoginOrPasswordException("Login or password invalid");
+    public List<UserDTO> findAllByNameAndEmail() {
+        List<UserDTO> userDTOS = new ArrayList<>();
+        List<Usuario> users = repository.findAll();
+        for (Usuario u: users) {
+            userDTOS.add(new UserDTO(u.getId(), u.getNome(), u.getEmail()));
         }
-        if (user.getLogin().equals(login) && (user.getSenha().equals(senha))) {
-            if (user.getStatus().equals("A")) {
-                user = repository.getById(user.getId());
-            } else if(user.getStatus().equals("C")){
-                throw new InativeUserException("User is not active");
-            }
-        }
-        return user;
+        return userDTOS;
+    }
 
+    public List<NameDTO> findAllByName(){
+        List<NameDTO> userDTOS = new ArrayList<>();
+        List<Usuario> users = repository.findAll();
+        for (Usuario u: users) userDTOS.add(new NameDTO(u.getNome()));
+        return userDTOS;
+    }
 
-
-
+    public List<EmailDTO> findAllByEmail(){
+        List<EmailDTO> usersDTO = new ArrayList<>();
+        List<Usuario> users = repository.findAll();
+        for (Usuario u: users) usersDTO.add(new EmailDTO(u.getEmail()));
+        return usersDTO;
     }
 
     public Usuario updateDate(Usuario oldData, Usuario usuario) {
             //novos dados
-            oldData.setNome(usuario.getNome());
+            oldData.setNome(nameFormat(usuario.getNome()));
             oldData.setEmail(usuario.getEmail());
             oldData.setTelefone(usuario.getTelefone());
-            oldData.setStatus(usuario.getStatus());
-        return repository.save(oldData);
+            oldData.setStatus(nameFormat(usuario.getStatus()));
+        return oldData;
     }
 
-    protected Date dateFormat() {
+    protected Date dateFormat() throws ParseException{
         Date dataCadastro = new Date();
-        try {
-            String formatDate = null;
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:MM:ss");
-            formatDate = dateFormat.format(dataCadastro);
-            dataCadastro = dateFormat.parse(formatDate);
-        }catch (ParseException err){
-            err.getMessage();
-        }catch (NullPointerException err2){
-            err2.getMessage();
-        }finally {
-            return dataCadastro;
+        String formatDate;
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        formatDate = dateFormat.format(dataCadastro);
+        dataCadastro = dateFormat.parse(formatDate);
+        return dataCadastro;
         }
 
-    }
+
 
     protected String nameFormat(String name){
         name = name.trim();
