@@ -44,6 +44,7 @@ public class UsuarioService extends FormatData implements ValidacaoUsuario {
     public Usuario create(Usuario usuario){
         try {
             usuario.setNome(nameFormat(usuario.getNome()));
+
             try {
                 usuario.setDataCadastro(dateFormat());
             } catch (ParseException e) {
@@ -63,7 +64,7 @@ public class UsuarioService extends FormatData implements ValidacaoUsuario {
 
     public void update(Usuario usuario){
         Usuario newUser = repository.getReferenceById(usuario.getId());
-        newUser = updateDate(newUser, usuario);
+        newUser = updateData(newUser, usuario);
         repository.save(newUser);
     }
 
@@ -104,7 +105,7 @@ public class UsuarioService extends FormatData implements ValidacaoUsuario {
         return usersList;
     }
 
-    public Usuario updateDate(Usuario oldData, Usuario usuario) {
+    public Usuario updateData(Usuario oldData, Usuario usuario) {
             //novos dados
             oldData.setNome(nameFormat(usuario.getNome()));
             oldData.setEmail(usuario.getEmail());
