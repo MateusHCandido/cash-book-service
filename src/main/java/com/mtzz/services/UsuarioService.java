@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UsuarioService extends FormatData implements ValidacaoUsuario {
@@ -79,30 +80,18 @@ public class UsuarioService extends FormatData implements ValidacaoUsuario {
     }
 
     //Listar usuários por nome e email
-    public List<Map<String, String>> findAllByNameAndEmail() {
-        List<Map<String, String>> list = new ArrayList<>();
-        List<Usuario> usersList = repository.findAll();
-        for(Usuario u: usersList){
-            Map<String, String> users = new HashMap<>();
-            users.put("nome", u.getNome());
-            users.put("email", u.getEmail());
-            list.add(users);
-        }
-        return list;
+    public List<Usuario> findAllByNameAndEmail(String name, String email) {
+        return repository.findByNomeAndEmail(name, email);
     }
 
     //Listar usuários por nome
-    public List<Map<String, String>> findAllByName(){
-        List<Map<String, String>> usersList = findAllByNameAndEmail(); //receber a lista com nome e email
-        for(Map<String, String> u: usersList) u.remove("email"); //remover a chave email de cada elemento da lista
-        return usersList;
+    public List<Usuario> findAllByName(String name){
+        return repository.findByNome(name);
     }
 
     //Listar usuários por email
-    public List<Map<String, String>> findAllByEmail(){
-        List<Map<String, String>> usersList = findAllByNameAndEmail(); //receber a lista com nome e email
-        for(Map<String, String> u: usersList) u.remove("nome"); //remover a chave email de cada elemento da lista
-        return usersList;
+    public List<Usuario> findAllByEmail(String email){
+        return repository.findByEmail(email);
     }
 
     public Usuario updateData(Usuario oldData, Usuario usuario) {

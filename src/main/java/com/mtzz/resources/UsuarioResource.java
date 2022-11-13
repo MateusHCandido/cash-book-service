@@ -51,20 +51,19 @@ public class UsuarioResource {
         return ResponseEntity.ok().body(service.autenticarLogin(login, senha));
     }
 
-    @GetMapping(value = "/filter/list/name-email")
-    public ResponseEntity<List<Map<String, String>>> findAllByNameAndEmail(){
-        return ResponseEntity.ok().body(service.findAllByNameAndEmail());
+    @GetMapping(value = "/filter/list/name-email/{nome}-{email}")
+    public ResponseEntity<List<Usuario>> findAllByNameAndEmail(@PathVariable String nome, @PathVariable String email){
+        return ResponseEntity.ok().body(service.findAllByNameAndEmail(nome, email));
     }
 
-    @GetMapping(value = "/filter/list/name")
-    public ResponseEntity<List<Map<String, String>>> findAllByName(){
-        return ResponseEntity.ok().body(service.findAllByName());
+    @GetMapping(value = "/filter/list/name/{nome}")
+    public ResponseEntity<List<Usuario>> findAllByName(@PathVariable String nome){
+        return ResponseEntity.ok().body(service.findAllByName(nome));
     }
 
-    @GetMapping(value = "/filter/list/email")
-    public ResponseEntity<List<Map<String, String>>> findAllByEmail(){
-        List<Map<String, String>> users = service.findAllByEmail();
-        return ResponseEntity.ok().body(users);
+    @GetMapping(value = "/filter/list/email/{email}")
+    public ResponseEntity<List<Usuario>> findAllByEmail(@PathVariable String email){
+        return ResponseEntity.ok().body(service.findAllByEmail(email));
     }
 
 }
