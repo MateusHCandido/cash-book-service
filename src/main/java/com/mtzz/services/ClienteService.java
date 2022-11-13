@@ -76,65 +76,60 @@ public class ClienteService extends FormatData {
             throw new ValueNotFoundException("Change values referring to street, city, uf, zip code, telephone and " +
                     "email must be parameterized");
         }
-
         return dataClient;
     }
 
-    //FindByNameCpfCnpjpCidadeUF*
-    public List<Map<String, String>> findAllByNCCU(){
-        List<Cliente> allClients = repository.findAll();
-        List<Map<String, String>> clients = new ArrayList<>();
-        for(Cliente c: allClients){
-            Map<String, String> clts = new HashMap<>();
-            clts.put("Nome", c.getNome());
-            clts.put("CPF_CNPJ", c.getCpfCnpj());
-            clts.put("Cidade", c.getCidade());
-            clts.put("UF", c.getUf());
-            clients.add(clts);
-        }
-        return clients;
+    public List<Cliente> findAllByNCCU(String nome, String cpfCnpj, String cidade, String uf){
+        return repository.findByNomeAndCpfCnpjAndCidadeAndUf(nome,cpfCnpj,cidade,uf);
     }
 
-    public List<Map<String, String>> findAllByName(){
-        List<Map<String, String>> clients = findAllByNCCU();
-        for(Map<String, String> c: clients){
-            c.remove("CPF_CNPJ");
-            c.remove("Cidade");
-            c.remove("UF");
-        }
-        return clients;
+    public List<Cliente> findByNomeAndCpfCnpjAndCidade(String nome, String cpfCnpj, String cidade){
+        return repository.findByNomeAndCpfCnpjAndCidade(nome, cpfCnpj, cidade);
     }
 
-    public List<Map<String, String>> findAllByCpfCnpj(){
-        List<Map<String, String>> clients = findAllByNCCU();
-        for(Map<String, String> c: clients){
-            c.remove("Nome");
-            c.remove("Cidade");
-            c.remove("UF");
-        }
-        return clients;
+    public List<Cliente> findByNomeAndCpfCnpjAndUf(String nome,String cpfCnpj, String uf){
+        return repository.findByNomeAndCpfCnpjAndUf(nome, cpfCnpj, uf);
     }
 
-    public List<Map<String, String>> findAllByCidade(){
-        List<Map<String, String>> clients = findAllByNCCU();
-        for(Map<String, String> c: clients){
-            c.remove("Nome");
-            c.remove("CPF_CNPJ");
-            c.remove("UF");
-        }
-        return clients;
+    public List<Cliente> findByNomeAndCidadeAndUf(String nome, String cidade, String uf){
+        return repository.findByNomeAndCidadeAndUf(nome, cidade, uf);
     }
 
-    public List<Map<String, String>> findAllByUF(){
-        List<Map<String, String>> clients = findAllByNCCU();
-        for(Map<String, String> c: clients){
-            c.remove("Nome");
-            c.remove("CPF_CNPJ");
-            c.remove("Cidade");
-        }
-        return clients;
+    public List<Cliente> findByNomeAndCpfCnpj(String nome, String cpfCnpj){
+        return repository.findByNomeAndCpfCnpj(nome, cpfCnpj);
     }
 
+    public List<Cliente> findByNomeAndCidade(String nome, String cidade){
+        return repository.findByNomeAndCidade(nome, cidade);
+    }
+
+    public List<Cliente> findByNomeAndUf(String nome, String uf){
+        return repository.findByNomeAndUf(nome, uf);
+    }
+
+    public List<Cliente> findByCpfCnpjAndCidade(String cpfCnpj, String cidade){
+        return repository.findByCpfCnpjAndCidade(cpfCnpj, cidade);
+    }
+
+    public List<Cliente> findByCpfCnpjAndUf(String cpfCnpj, String uf){
+        return repository.findByCpfCnpjAndUf(cpfCnpj, uf);
+    }
+
+    public List<Cliente> findByCidadeAndUf(String cidade, String uf){
+        return repository.findByCidadeAndUf(cidade, uf);
+    }
+
+    public List<Cliente> findByCpfCnpj(String cpfCnpj){
+        return repository.findByCpfCnpj(cpfCnpj);
+    }
+
+    public List<Cliente> findByCidade(String cidade){
+        return repository.findByCidade(cidade);
+    }
+
+    public List<Cliente> findByUf(String uf){
+        return repository.findByUf(uf);
+    }
 
 }
 

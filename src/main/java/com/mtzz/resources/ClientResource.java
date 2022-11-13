@@ -18,6 +18,7 @@ public class ClientResource {
     @Autowired
     private ClienteService service;
 
+
     @PostMapping(value = "/create")
     public ResponseEntity<Cliente> createClient(@RequestBody Cliente cliente){
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
@@ -43,28 +44,75 @@ public class ClientResource {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(value = "/filter/list/name-cpfCnpj-cidade-uf")
-    public ResponseEntity<List<Map<String, String>>> findAllByNCCU(){
-        return ResponseEntity.ok().body(service.findAllByNCCU());
+    @GetMapping(value = "/filter/list/name/cpfCnpj/cidade/uf/{nome}-{cpfCnpj}-{cidade}-{uf}")
+    public ResponseEntity<List<Cliente>> findAllByNCCU(@PathVariable String nome, @PathVariable String cpfCnpj,
+                                                       @PathVariable String cidade, @PathVariable String uf){
+        return ResponseEntity.ok().body(service.findAllByNCCU(nome, cpfCnpj, cidade, uf));
     }
 
-    @GetMapping(value = "/filter/list/name")
-    public ResponseEntity<List<Map<String, String>>> findAllByName(){
-        return ResponseEntity.ok().body(service.findAllByName());
+    @GetMapping(value = "/filter/list/cpfCnpj/cidade/{nome}-{cpfCnpj}-{cidade}")
+    public ResponseEntity<List<Cliente>> findByNomeAndCpfCnpjAndCidade(@PathVariable String nome,
+                                                                    @PathVariable String cpfCnpj,
+                                                                    @PathVariable String cidade){
+        return ResponseEntity.ok().body(service.findByNomeAndCpfCnpjAndCidade(nome, cpfCnpj, cidade));
     }
 
-    @GetMapping(value = "/filter/list/cpf_cnpj")
-    public ResponseEntity<List<Map<String, String>>> findAllByCpfCnpj(){
-        return ResponseEntity.ok().body(service.findAllByCpfCnpj());
+    @GetMapping(value = "/filter/list/cpfCnpj/uf/{nome}-{cpfCnpj}-{uf}")
+    public ResponseEntity<List<Cliente>> findByNomeAndCpfCnpjAndUf(@PathVariable String nome,
+                                                                    @PathVariable String cpfCnpj,
+                                                                    @PathVariable String uf){
+        return ResponseEntity.ok().body(service.findByNomeAndCpfCnpjAndUf(nome, cpfCnpj, uf));
     }
 
-    @GetMapping(value = "/filter/list/cidade")
-    public ResponseEntity<List<Map<String, String>>> findAllByCidade(){
-        return ResponseEntity.ok().body(service.findAllByCidade());
+    @GetMapping(value = "/filter/list/name/cidade/uf/{nome}-{cidade}-{uf}")
+    public ResponseEntity<List<Cliente>> findByNomeAndCidadeAndUf(@PathVariable String nome,
+                                                                  @PathVariable String cidade,
+                                                                  @PathVariable String uf){
+        return ResponseEntity.ok().body(service.findByNomeAndCidadeAndUf(nome, cidade, uf));
     }
 
-    @GetMapping(value = "/filter/list/uf")
-    public ResponseEntity<List<Map<String, String>>> findAllByUF(){
-        return ResponseEntity.ok().body(service.findAllByUF());
+    @GetMapping(value = "/filter/list/name/cpfCnpj/{nome}-{cpfCnpj}")
+    public ResponseEntity<List<Cliente>> findByNomeAndCpfCnpj(@PathVariable String nome,@PathVariable String cpfCnpj){
+        return ResponseEntity.ok().body(service.findByNomeAndCpfCnpj(nome, cpfCnpj));
+    }
+
+    @GetMapping(value = "/filter/list/name/cidade/{nome}-{cidade}")
+    public ResponseEntity<List<Cliente>> findByNomeAndCidade(@PathVariable String nome,@PathVariable String cidade){
+        return ResponseEntity.ok().body(service.findByNomeAndCidade(nome, cidade));
+    }
+
+    @GetMapping(value = "/filter/list/name/uf/{nome}-{uf}")
+    public ResponseEntity<List<Cliente>> findByNomeAndUf(String nome, String uf){
+        return ResponseEntity.ok().body(service.findByNomeAndUf(nome, uf));
+    }
+
+    @GetMapping(value = "/filter/list/cpfCnpj/cidade/{cpfCnpj}-{cidade}")
+    public ResponseEntity<List<Cliente>> findByCpfCnpjAndCidade(@PathVariable String cpfCnpj,@PathVariable String cidade) {
+            return ResponseEntity.ok().body(service.findByCpfCnpjAndCidade(cpfCnpj, cidade));
+    }
+
+    @GetMapping(value = "/filter/list/cpfCnpj/uf/{cpfCnpj}-{uf}")
+    public ResponseEntity<List<Cliente>> findByCpfCnpjAndUf(@PathVariable String cpfCnpj,@PathVariable String uf) {
+        return ResponseEntity.ok().body(service.findByCpfCnpjAndUf(cpfCnpj, uf));
+    }
+
+    @GetMapping(value = "/filter/list/cidade/uf/{cidade}-{uf}")
+    public ResponseEntity<List<Cliente>> findByCidadeAndUf(String cidade, String uf) {
+        return ResponseEntity.ok().body(service.findByCpfCnpjAndUf(cidade, uf));
+    }
+
+    @GetMapping(value = "/filter/list/cpfCnpj/{cpfCnpj}")
+    public ResponseEntity<List<Cliente>> findByCpfCnpj(@PathVariable String cpfCnpj){
+        return ResponseEntity.ok().body(service.findByCpfCnpj(cpfCnpj));
+    }
+
+    @GetMapping(value = "/filter/list/cidade/{cidade}")
+    public ResponseEntity<List<Cliente>> findByCidade(@PathVariable String cidade){
+        return ResponseEntity.ok().body(service.findByCidade(cidade));
+    }
+
+    @GetMapping(value = "filter/list/cidade/{uf}")
+    public ResponseEntity<List<Cliente>> findByUf(@PathVariable String uf){
+        return ResponseEntity.ok().body(service.findByUf(uf));
     }
 }
