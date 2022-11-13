@@ -2,11 +2,14 @@ package com.mtzz.entities;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "CLIENTES")
@@ -23,7 +26,7 @@ public class Cliente {
     @Column(nullable = false, length = 30)
     private String nome; //not null, varchar(30)
 
-    @Column(nullable = false, length = 14)
+    @Column(nullable = false, length = 14, name = "CPF_CNPJ")
     private String cpfCnpj; //not null, varchar (14)
 
     @Column(nullable = false, length = 50)
@@ -43,6 +46,7 @@ public class Cliente {
 
     @Column(length = 100)
     private String email; //varchar(100)
+
 
     public Cliente() {
     }
