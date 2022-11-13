@@ -1,9 +1,6 @@
 package com.mtzz.services;
 
 import com.mtzz.entities.Usuario;
-import com.mtzz.repositories.DTO.userDTO.EmailDTO;
-import com.mtzz.repositories.DTO.userDTO.NameDTO;
-import com.mtzz.repositories.DTO.userDTO.UserDTO;
 import com.mtzz.repositories.UserRepository;
 import com.mtzz.services.autenticacao.ValidacaoUsuario;
 import com.mtzz.services.autenticacao.exception.InativeUserException;
@@ -19,15 +16,14 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class UsuarioService extends FormatData implements ValidacaoUsuario {
 
     @Autowired
     private UserRepository repository;
+
 
     @Override
     public Usuario autenticarLogin(String login, String senha) {
@@ -65,7 +61,6 @@ public class UsuarioService extends FormatData implements ValidacaoUsuario {
                 ("User not found! Id: " + id, "Cause type: " + Usuario.class.getName()));
     }
 
-
     public void update(Usuario usuario){
         Usuario newUser = repository.getReferenceById(usuario.getId());
         newUser = updateDate(newUser, usuario);
@@ -82,27 +77,31 @@ public class UsuarioService extends FormatData implements ValidacaoUsuario {
         }
     }
 
-    public List<UserDTO> findAllByNameAndEmail() {
-        List<UserDTO> userDTOS = new ArrayList<>();
-        List<Usuario> users = repository.findAll();
-        for (Usuario u: users) {
-            userDTOS.add(new UserDTO(u.getId(), u.getNome(), u.getEmail()));
+    //Listar usuários por nome e email
+    public List<Map<String, String>> findAllByNameAndEmail() {
+        List<Map<String, String>> list = new ArrayList<>();
+        List<Usuario> usersList = repository.findAll();
+        for(Usuario u: usersList){
+            Map<String, String> users = new HashMap<>();
+            users.put("nome", u.getNome());
+            users.put("email", u.getEmail());
+            list.add(users);
         }
-        return userDTOS;
+        return list;
     }
 
-    public List<NameDTO> findAllByName(){
-        List<NameDTO> userDTOS = new ArrayList<>();
-        List<Usuario> users = repository.findAll();
-        for (Usuario u: users) userDTOS.add(new NameDTO(u.getNome()));
-        return userDTOS;
+    //Listar usuários por nome
+    public List<Map<String, String>> findAllByName(){
+        List<Map<String, String>> usersList = findAllByNameAndEmail(); //receber a lista com nome e email
+        for(Map<String, String> u: usersList) u.remove("email"); //remover a chave email de cada elemento da lista
+        return usersList;
     }
 
-    public List<EmailDTO> findAllByEmail(){
-        List<EmailDTO> usersDTO = new ArrayList<>();
-        List<Usuario> users = repository.findAll();
-        for (Usuario u: users) usersDTO.add(new EmailDTO(u.getEmail()));
-        return usersDTO;
+    //Listar usuários por email
+    public List<Map<String, String>> findAllByEmail(){
+        List<Map<String, String>> usersList = findAllByNameAndEmail(); //receber a lista com nome e email
+        for(Map<String, String> u: usersList) u.remove("nome"); //remover a chave email de cada elemento da lista
+        return usersList;
     }
 
     public Usuario updateDate(Usuario oldData, Usuario usuario) {
@@ -113,10 +112,5 @@ public class UsuarioService extends FormatData implements ValidacaoUsuario {
             oldData.setStatus(nameFormat(usuario.getStatus()));
         return oldData;
     }
-
-
-
-
-
 
 }

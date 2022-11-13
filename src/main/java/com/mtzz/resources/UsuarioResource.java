@@ -1,18 +1,15 @@
 package com.mtzz.resources;
 
 import com.mtzz.entities.Usuario;
-import com.mtzz.repositories.DTO.userDTO.EmailDTO;
-import com.mtzz.repositories.DTO.userDTO.NameDTO;
-import com.mtzz.repositories.DTO.userDTO.UserDTO;
 import com.mtzz.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.naming.Name;
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.http.ResponseEntity.*;
 
@@ -46,31 +43,28 @@ public class UsuarioResource {
 
     @GetMapping(value = "/find/id/{id}")
     public ResponseEntity<Usuario> findById(@PathVariable Long id){
-        Usuario user = service.findById(id);
-        return ResponseEntity.ok().body(user);
+        return ResponseEntity.ok().body(service.findById(id));
     }
 
     @GetMapping(value = "/login/{login}-{senha}")
     public ResponseEntity<Usuario> validarUsuario(@PathVariable String login,@PathVariable String senha){
-        Usuario user = service.autenticarLogin(login, senha);
-        return ResponseEntity.ok().body(user);
+        return ResponseEntity.ok().body(service.autenticarLogin(login, senha));
     }
 
     @GetMapping(value = "/filter/list/name-email")
-    public ResponseEntity<List<UserDTO>> findAllByNameAndEmail(){
-        List<UserDTO> users = service.findAllByNameAndEmail();
-        return ResponseEntity.ok().body(users);
+    public ResponseEntity<List<Map<String, String>>> findAllByNameAndEmail(){
+        return ResponseEntity.ok().body(service.findAllByNameAndEmail());
     }
 
     @GetMapping(value = "/filter/list/name")
-    public ResponseEntity<List<NameDTO>> findAllByName(){
-        List<NameDTO> users = service.findAllByName();
-        return ResponseEntity.ok().body(users);
+    public ResponseEntity<List<Map<String, String>>> findAllByName(){
+        return ResponseEntity.ok().body(service.findAllByName());
     }
 
     @GetMapping(value = "/filter/list/email")
-    public ResponseEntity<List<EmailDTO>> findAllByEmail(){
-        List<EmailDTO> users = service.findAllByEmail();
+    public ResponseEntity<List<Map<String, String>>> findAllByEmail(){
+        List<Map<String, String>> users = service.findAllByEmail();
         return ResponseEntity.ok().body(users);
     }
+
 }

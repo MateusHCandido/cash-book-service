@@ -25,4 +25,6 @@ public abstract class FormatData {
         dataCadastro = dateFormat.parse(formatDate);
         return dataCadastro;
     }
+
+
 }
