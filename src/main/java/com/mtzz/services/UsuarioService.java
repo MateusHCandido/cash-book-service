@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.*;
-import java.util.stream.Collectors;
+
 
 @Service
 public class UsuarioService extends FormatData implements ValidacaoUsuario {
@@ -45,7 +45,7 @@ public class UsuarioService extends FormatData implements ValidacaoUsuario {
     public Usuario create(Usuario usuario){
         try {
             usuario.setNome(nameFormat(usuario.getNome()));
-
+            usuario.setTelefone(numberFormat(usuario.getTelefone()));
             try {
                 usuario.setDataCadastro(dateFormat());
             } catch (ParseException e) {
