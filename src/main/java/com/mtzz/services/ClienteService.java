@@ -28,7 +28,7 @@ public class ClienteService extends FormatData {
 
     public Cliente createCliente(Cliente cliente){
         try {
-            cliente.setDataCadastro(dateFormat());
+            cliente.setDataCadastro(dateAndTimeFormat());
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -38,6 +38,7 @@ public class ClienteService extends FormatData {
         cliente.setCidade(nameFormat(cliente.getCidade()));
         cliente.setUf(nameFormat(cliente.getUf()));
         cliente.setTelefone(numberFormat(cliente.getTelefone()));
+        cliente.setEmail(nameFormat(cliente.getEmail()));
         return repository.save(cliente);
     }
 

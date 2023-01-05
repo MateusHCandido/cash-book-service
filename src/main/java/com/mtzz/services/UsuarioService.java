@@ -47,7 +47,7 @@ public class UsuarioService extends FormatData implements ValidacaoUsuario {
             usuario.setNome(nameFormat(usuario.getNome()));
             usuario.setTelefone(numberFormat(usuario.getTelefone()));
             try {
-                usuario.setDataCadastro(dateFormat());
+                usuario.setDataCadastro(dateAndTimeFormat());
             } catch (ParseException e) {
                 e.printStackTrace();
             }

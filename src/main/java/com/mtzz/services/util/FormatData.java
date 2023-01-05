@@ -16,15 +16,24 @@ public abstract class FormatData {
         return name;
     }
 
-    protected Date dateFormat() throws ParseException {
+    protected Date dateAndTimeFormat() throws ParseException {
         Date dataCadastro = new Date();
         String formatDate;
-
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         formatDate = dateFormat.format(dataCadastro);
         dataCadastro = dateFormat.parse(formatDate);
         return dataCadastro;
     }
+
+    protected Date dateFormat() throws ParseException {
+        Date dataCadastro = new Date();
+        String formatDate;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        formatDate = dateFormat.format(dataCadastro);
+        dataCadastro = dateFormat.parse(formatDate);
+        return dataCadastro;
+    }
+
 
 
 }

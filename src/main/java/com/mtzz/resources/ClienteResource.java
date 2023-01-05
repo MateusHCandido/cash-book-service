@@ -1,7 +1,9 @@
 package com.mtzz.resources;
 
 import com.mtzz.entities.Cliente;
+import com.mtzz.entities.DTOs.ClienteDTO;
 import com.mtzz.services.ClienteService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,20 +11,21 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/clients")
-public class ClientResource {
+public class ClienteResource {
 
     @Autowired
     private ClienteService service;
 
 
     @PostMapping(value = "/create")
-    public ResponseEntity<Cliente> createClient(@RequestBody Cliente cliente){
+    public ResponseEntity<Cliente> createClient(@RequestBody ClienteDTO clienteDTO){
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(cliente.getId()).toUri();
+                .buildAndExpand(clienteDTO.getId()).toUri();
+        Cliente cliente = new Cliente();
+        BeanUtils.copyProperties(clienteDTO, cliente);
         return ResponseEntity.created(uri).body(service.createCliente(cliente));
     }
 
