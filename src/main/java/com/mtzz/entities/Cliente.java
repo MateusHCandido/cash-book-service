@@ -54,7 +54,8 @@ public class Cliente implements Serializable {
     private String email;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<LivroCaixa> contabil = new HashSet<>();
+
 
 }

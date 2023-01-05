@@ -1,5 +1,7 @@
 package com.mtzz.resources;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mtzz.entities.Cliente;
 import com.mtzz.entities.DTOs.LivroCaixaDTO;
 import com.mtzz.entities.LivroCaixa;
@@ -56,6 +58,10 @@ public class LivroCaixaResource {
         return ResponseEntity.noContent().build();
     }
 
-
+    @JacksonInject
+    @GetMapping(value = "/list/by/id/{id}")
+    public ResponseEntity<List<LivroCaixa>> findByClienteId(@PathVariable Long id){
+        return ResponseEntity.ok().body(service.findByCliente(id));
+    }
 
 }

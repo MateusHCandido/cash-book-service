@@ -40,6 +40,7 @@ public class LivroCaixa implements Serializable {
     @Column(nullable = false, precision = 10, scale = 2)
     private Double valor;
 
+
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
